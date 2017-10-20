@@ -29,15 +29,18 @@ cat << EOF > $CONFIG_XML
     <short>SSServer</short>
     <description>Shadowsocks Server: TCP and UDP ports.</description>
 EOF
-
 cat $CONFIG_FILE | sed -rn \
 's/.*"([0-9]+)": .*/    <port port="\1" protocol="tcp"\/> \
     <port port="\1" protocol="udp"\/> /p' >> $CONFIG_XML
-
 cat << EOF >> $CONFIG_XML
 </service>
 EOF
 
+echo FirewallD: 
+
+if [ running = "$(firewall-cmd --state)" ]
+then
+    
 FOUND_SS=$(firewall-cmd --permanent --list-services | grep --only-matching ssserver)
 if [ -z $FOUND_SS ]
 then
@@ -48,6 +51,8 @@ fi
 
 firewall-cmd --info-service=ssserver
 firewall-cmd --reload
+
+fi
 
 rm -r $CONFIG_XML
 
