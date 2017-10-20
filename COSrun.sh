@@ -1,9 +1,8 @@
-
 #!/bin/bash 
 
 ################################################################################
-########## Run Shadowsocks Server                                     ##########
-########## Tested on CentOS 7                                         ##########
+##########     Run Shadowsocks Server                                 ##########
+##########     Tested on CentOS 7                                     ##########
 ################################################################################
 
 CONFIG_FILE=/etc/shadowsocks.json
@@ -39,10 +38,18 @@ cat << EOF >> $CONFIG_XML
 </service>
 EOF
 
+FOUND_SS=$(firewall-cmd --permanent --list-services | grep --only-matching ssserver)
+if [ -z $FOUND_SS ]
+then
+# firewall-cmd --permanent --delete-service=ssserver
 firewall-cmd --permanent --new-service-from-file=$CONFIG_XML --name=ssserver
 firewall-cmd --permanent --add-service=ssserver
-## firewall-cmd --info-service=ssserver
+fi
+
+firewall-cmd --info-service=ssserver
 firewall-cmd --reload
+
+rm -r $CONFIG_XML
 
 if [ -e /var/run/shadowsocks.pid ] 
 then 
