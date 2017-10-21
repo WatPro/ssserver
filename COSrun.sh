@@ -36,19 +36,20 @@ cat << EOF >> $CONFIG_XML
 </service>
 EOF
 
-echo FirewallD: 
+
 
 if [ running = "$(firewall-cmd --state)" ]
 then
     
-FOUND_SS=$(firewall-cmd --permanent --list-services | grep --only-matching ssserver)
-if [ -z $FOUND_SS ]
+FOUND_SS=$(firewall-cmd --permanent --get-services | grep --only-matching ssserver)
+if [ ssserver = $FOUND_SS ]
 then
-# firewall-cmd --permanent --delete-service=ssserver
+    echo Deleting Old Port Settings
+    firewall-cmd --permanent --delete-service=ssserver
+fi
 firewall-cmd --permanent --new-service-from-file=$CONFIG_XML --name=ssserver
 firewall-cmd --permanent --add-service=ssserver
-fi
-
+firewall-cmd --permanent --list-services
 firewall-cmd --info-service=ssserver
 firewall-cmd --reload
 
