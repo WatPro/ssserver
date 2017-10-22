@@ -39,7 +39,7 @@ EOF
 
 
 
-if [ running = "$(firewall-cmd --state)" ]
+if [ running = "$(firewall-cmd --state 2>&1)" ]
 then
     
 FOUND_SS=$(firewall-cmd --permanent --get-services | grep --only-matching $SSS_NAME)
