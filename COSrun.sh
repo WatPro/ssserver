@@ -49,8 +49,8 @@ fi
 firewall-cmd --permanent --new-service-from-file=$CONFIG_XML --name=$SSS_NAME
 firewall-cmd --permanent --add-service=$SSS_NAME
 firewall-cmd --permanent --list-services
-firewall-cmd --info-service=$SSS_NAME
 firewall-cmd --reload
+firewall-cmd --info-service=$SSS_NAME
 
 fi
 
