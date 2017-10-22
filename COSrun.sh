@@ -36,9 +36,7 @@ cat $CONFIG_FILE | sed -rn \
 cat << EOF >> $CONFIG_XML
 </service>
 EOF
-
-
-
+ 
 if [ running = "$(firewall-cmd --state 2>&1)" ]
 then
     
@@ -56,7 +54,7 @@ firewall-cmd --reload
 
 fi
 
-rm -r $CONFIG_XML
+rm -f $CONFIG_XML
 
 if [ -e /var/run/shadowsocks.pid ] 
 then 
@@ -64,3 +62,4 @@ then
 else
     ssserver -c $CONFIG_FILE -d start
 fi
+ 
