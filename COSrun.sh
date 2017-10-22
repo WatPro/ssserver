@@ -63,3 +63,8 @@ else
     ssserver -c $CONFIG_FILE -d start
 fi
  
+echo "Show Running Processes... " 
+ps -A c |  awk 'NR==1 || /ssserver/' 
+echo "Show Ports in Use... " 
+netstat --all --programs --numeric --tcp --udp 
+ 
