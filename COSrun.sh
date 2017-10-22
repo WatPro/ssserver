@@ -7,6 +7,7 @@
 
 CONFIG_FILE=/etc/shadowsocks.json
 CONFIG_XML=./ssserver.xml
+SSS_NAME=ssserver
 
 cat << END_OF_FILE > $CONFIG_FILE
 {
@@ -41,16 +42,16 @@ EOF
 if [ running = "$(firewall-cmd --state)" ]
 then
     
-FOUND_SS=$(firewall-cmd --permanent --get-services | grep --only-matching ssserver)
-if [ ssserver = $FOUND_SS ]
+FOUND_SS=$(firewall-cmd --permanent --get-services | grep --only-matching $SSS_NAME)
+if [ ${#FOUND_SS} -gt 0 ]
 then
     echo Deleting Old Port Settings
-    firewall-cmd --permanent --delete-service=ssserver
+    firewall-cmd --permanent --delete-service=$SSS_NAME
 fi
-firewall-cmd --permanent --new-service-from-file=$CONFIG_XML --name=ssserver
-firewall-cmd --permanent --add-service=ssserver
+firewall-cmd --permanent --new-service-from-file=$CONFIG_XML --name=$SSS_NAME
+firewall-cmd --permanent --add-service=$SSS_NAME
 firewall-cmd --permanent --list-services
-firewall-cmd --info-service=ssserver
+firewall-cmd --info-service=$SSS_NAME
 firewall-cmd --reload
 
 fi
