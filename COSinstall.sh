@@ -7,3 +7,4 @@
 
 yum -y install python-setuptools git && easy_install pip
 pip install git+https://github.com/shadowsocks/shadowsocks.git@master
+
