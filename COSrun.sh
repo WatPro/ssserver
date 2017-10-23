@@ -66,5 +66,5 @@ fi
 echo "Show Running Processes... " 
 ps -A c |  awk 'NR==1 || /ssserver/' 
 echo "Show Ports in Use... " 
-netstat --all --programs --numeric --tcp --udp 
+ss --listening --numeric --processes | awk 'NR==1 || /^(tcp)|(udp)/' 
  
