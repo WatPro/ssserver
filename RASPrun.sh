@@ -60,6 +60,13 @@ sudo iptables -t mangle --append SHADOWSOCKS --protocol udp --dport 53 --jump TP
 sudo iptables --table nat --append PREROUTING --protocol tcp --jump SHADOWSOCKS
 sudo iptables --table mangle --append PREROUTING --jump SHADOWSOCKS
 
+PID_FILE='/var/run/shadowsocks.pid'
+if [ -f ${PID_FILE} ]
+then
+    sudo kill `cat ${PID_FILE}` 
+    sudo rm --force "$PID_FILE"
+fi
+
 # Start the shadowsocks-redir
 sudo ss-redir -u -c /etc/config/shadowsocks.json -f /var/run/shadowsocks.pid 
 
