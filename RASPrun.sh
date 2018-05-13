@@ -13,7 +13,11 @@ then
    sudo apt-get --assume-yes install shadowsocks-libev 
 fi
 SS_REDIR=`which ss-redir | head --lines=1`
- 
+if [ ! -n "$SS_REDIR" ]
+then
+   exit 1 
+fi
+
 SS_CONFIG='/etc/config/shadowsocks.json'
 sudo mkdir --parents "${SS_CONFIG%/*}/"
 sudo touch ${SS_CONFIG} 
