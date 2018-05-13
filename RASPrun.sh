@@ -75,8 +75,14 @@ sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --jump REDIRECT --
 sudo iptables --table nat --append OUTPUT --out-interface eth0 --protocol tcp --jump SHADOWSOCKS
  
 # Add any UDP rules
+if [ ! -n "`ip route show table 100`" ] 
+then
 sudo ip route add local default dev lo table 100
-sudo ip rule add fwmark 1 lookup 100
+fi
+if [ ! -n "`ip rule | grep 'fwmark 0x1 lookup 100'`" ]
+then
+sudo ip rule add fwmark 0x1 lookup 100
+fi
 sudo iptables -t mangle --append SHADOWSOCKS --protocol udp --dport 53 --jump TPROXY --on-port 1080 --tproxy-mark 0x01/0x01
 
 # Apply the rules
