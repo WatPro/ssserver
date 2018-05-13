@@ -31,9 +31,32 @@ sudo cat <<END_OF_FILE > ${SS_CONFIG}
 }
 END_OF_FILE
 
+function delete_shadowsocks {
+TABLE="$1"
+if [ ! -n "$TABLE" ] 
+then
+    return
+fi
+while true
+do
+DELETE_RULE=`sudo iptables --table ${TABLE} --list-rules | grep '^\-A.*SHADOWSOCKS.*$' | tail --lines=1 | sed 's/^\-A\(.*SHADOWSOCKS.*\)$/-D\1/'`
+if [ -n "$DELETE_RULE" ] 
+then
+    sudo iptables --table ${TABLE} ${DELETE_RULE}
+else
+    break
+fi
+done
+DELETE_RULE=`sudo iptables --table ${TABLE} --list-rules | grep '^.*SHADOWSOCKS$' | tail --lines=1`
+if [ -n "$DELETE_RULE" ]
+then
+    sudo iptables --table ${TABLE} --delete-chain SHADOWSOCKS
+fi
+}
 
-sudo iptables --table nat --delete-chain SHADOWSOCKS
-sudo iptables --table mangle --delete-chain SHADOWSOCKS
+delete_shadowsocks nat
+delete_shadowsocks mangle
+
 sudo iptables --table nat --new SHADOWSOCKS
 sudo iptables --table mangle --new SHADOWSOCKS
  
