@@ -104,3 +104,4 @@ fi
 sudo ss-redir -u -c ${SS_CONFIG} -f "$PID_FILE" 
 
 echo proxy is running: PID `cat ${PID_FILE}`
+ 
