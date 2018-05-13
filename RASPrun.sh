@@ -97,6 +97,6 @@ then
 fi
 
 # Start the shadowsocks-redir
-sudo ss-redir -u -c /etc/config/shadowsocks.json -f /var/run/shadowsocks.pid 
+sudo ss-redir -u -c ${SS_CONFIG} -f "$PID_FILE" 
 
 
