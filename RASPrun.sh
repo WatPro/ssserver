@@ -5,7 +5,7 @@ SERVER_PORT='8388'
 PASSWORD='password'
 DEV='eth0'
 LOCALHOST=`ip address show lo | sed --silent 's/^.*inet \([0-9\.]\+\).*$/\1/p'`
-LAN_ADDRESS=`ip address show ${DEV} | sed --silent 's/^.*inet \([0-9\.]\+\(\/[0-9]\+\)\?\).*$/\1/p'`
+LAN_ADDRESS=`ip address show ${DEV} | sed --silent 's/^.*inet \([0-9\.]\+\(\/[0-9]\+\)\?\).*$/\1/p' | head --lines=1`
  
 SS_REDIR=`which ss-redir | head --lines=1`
 if [ ! -n "$SS_REDIR" ]
@@ -76,7 +76,7 @@ sudo iptables --table nat --append SHADOWSOCKS --destination 192.168.0.0/16 --ju
 sudo iptables --table nat --append SHADOWSOCKS --destination 224.0.0.0/4 --jump RETURN
 sudo iptables --table nat --append SHADOWSOCKS --destination 240.0.0.0/4 --jump RETURN
 sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --jump REDIRECT --to-ports 1080
-sudo iptables --table nat --append OUTPUT --out-interface eth0 --protocol tcp --jump SHADOWSOCKS
+sudo iptables --table nat --append OUTPUT --out-interface ${DEV} --protocol tcp --jump SHADOWSOCKS
  
 # Add any UDP rules
 if [ ! -n "`ip route show table 100`" ] 
