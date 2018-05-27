@@ -77,6 +77,7 @@ sudo iptables --table nat --append SHADOWSOCKS --destination 224.0.0.0/4 --jump 
 sudo iptables --table nat --append SHADOWSOCKS --destination 240.0.0.0/4 --jump RETURN
 sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --jump REDIRECT --to-ports 1080
 sudo iptables --table nat --append OUTPUT --out-interface ${DEV} --protocol tcp --jump SHADOWSOCKS
+sudo iptables --table nat --append OUTPUT --physdev-out ${DEV} --protocol tcp --jump SHADOWSOCKS
  
 # Add any UDP rules
 if [ ! -n "`ip route show table 100`" ] 
@@ -88,12 +89,12 @@ then
 sudo ip rule add fwmark 0x1 lookup 100
 fi
 sudo iptables --table mangle --append SHADOWSOCKS --protocol udp --destination-port 53 --jump TPROXY --on-port 1080 --tproxy-mark 0x1/0x1
-
+sudo sysctl --write net.ipv4.ip_forward=1
+sudo sysctl --load
+ 
 # Apply the rules
 sudo iptables --table nat --append PREROUTING --protocol tcp --jump SHADOWSOCKS
 sudo iptables --table mangle --append PREROUTING --jump SHADOWSOCKS
-sudo sysctl --write net.ipv4.ip_forward=1
-sudo sysctl --load
 
 PID_FILE='/var/run/shadowsocks.pid'
 if [ -f ${PID_FILE} ]
