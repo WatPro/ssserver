@@ -87,11 +87,13 @@ if [ ! -n "`ip rule | grep 'fwmark 0x1 lookup 100'`" ]
 then
 sudo ip rule add fwmark 0x1 lookup 100
 fi
-sudo iptables -t mangle --append SHADOWSOCKS --protocol udp --dport 53 --jump TPROXY --on-port 1080 --tproxy-mark 0x01/0x01
+sudo iptables --table mangle --append SHADOWSOCKS --protocol udp --destination-port 53 --jump TPROXY --on-port 1080 --tproxy-mark 0x1/0x1
 
 # Apply the rules
 sudo iptables --table nat --append PREROUTING --protocol tcp --jump SHADOWSOCKS
 sudo iptables --table mangle --append PREROUTING --jump SHADOWSOCKS
+sudo sysctl --write net.ipv4.ip_forward=1
+sudo sysctl --load
 
 PID_FILE='/var/run/shadowsocks.pid'
 if [ -f ${PID_FILE} ]
