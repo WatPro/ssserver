@@ -77,6 +77,7 @@ sudo iptables --table nat --append SHADOWSOCKS --destination 224.0.0.0/4 --jump 
 sudo iptables --table nat --append SHADOWSOCKS --destination 240.0.0.0/4 --jump RETURN
 sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --jump REDIRECT --to-ports 1080
 sudo iptables --table nat --append OUTPUT --out-interface ${DEV} --protocol tcp --jump SHADOWSOCKS
+sudo iptables --table nat --append OUTPUT -m physdev --physdev-is-bridged --out-interface ${DEV} --protocol tcp --jump SHADOWSOCKS
  
 # Add any UDP rules
 if [ ! -n "`ip route show table 100`" ] 
