@@ -89,7 +89,7 @@ then
 sudo ip rule add fwmark 0x1 lookup 100
 fi
 sudo iptables --table mangle --append SHADOWSOCKS --protocol udp --destination-port 53 --jump TPROXY --on-port 1080 --tproxy-mark 0x1/0x1
-sudo sysctl --write net.ipv4.ip_forward=1
+sudo sysctl --write net.ipv4.ip_forward=1 > /dev/null
 sudo sysctl --load
  
 # Apply the rules
