@@ -13,9 +13,3 @@ bash COSrun.sh
 cat RASPrun.sh | sed "s/^SERVER_IP=.*$/SERVER_IP='10.10.10.1'/; s/^SERVER_PORT=.*$/SERVER_PORT='443'/; s/^PASSWORD=.*$/PASSWORD='password'/; s/^DEV=.*$/DEV='eth0'/" | sudo bash - 
 ```
 
-Or run it for bridge interface 
-
-```bash
-cat RASPrun.sh | sed "s/^SERVER_IP=.*$/SERVER_IP='10.10.10.1'/; s/^SERVER_PORT=.*$/SERVER_PORT='443'/; s/^PASSWORD=.*$/PASSWORD='password'/; s/^DEV=.*$/DEV='eth0'/" | sed "s/--out-interface/-m physdev --physdev-is-bridged --out-interface/" | sudo bash - 
-```
-
