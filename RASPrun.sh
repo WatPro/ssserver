@@ -65,18 +65,17 @@ sudo iptables --table nat --new SHADOWSOCKS
 sudo iptables --table mangle --new SHADOWSOCKS
  
 # Addresses to bypass the proxy 
-sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --destination ${SERVER_IP} --jump RETURN
-sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --destination ${LAN_ADDRESS} --jump RETURN
-sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --destination 0.0.0.0/8 --jump RETURN
-sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --destination 10.0.0.0/8 --jump RETURN
-sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --destination 127.0.0.0/8 --jump RETURN
-sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --destination 169.254.0.0/16 --jump RETURN
-sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --destination 172.16.0.0/12 --jump RETURN
-sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --destination 192.168.0.0/16 --jump RETURN
-sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --destination 224.0.0.0/4 --jump RETURN
-sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --destination 240.0.0.0/4 --jump RETURN
+sudo iptables --table nat --append SHADOWSOCKS --destination ${SERVER_IP} --jump RETURN
+sudo iptables --table nat --append SHADOWSOCKS --destination ${LAN_ADDRESS} --jump RETURN
+sudo iptables --table nat --append SHADOWSOCKS --destination 0.0.0.0/8 --jump RETURN
+sudo iptables --table nat --append SHADOWSOCKS --destination 10.0.0.0/8 --jump RETURN
+sudo iptables --table nat --append SHADOWSOCKS --destination 127.0.0.0/8 --jump RETURN
+sudo iptables --table nat --append SHADOWSOCKS --destination 169.254.0.0/16 --jump RETURN
+sudo iptables --table nat --append SHADOWSOCKS --destination 172.16.0.0/12 --jump RETURN
+sudo iptables --table nat --append SHADOWSOCKS --destination 192.168.0.0/16 --jump RETURN
+sudo iptables --table nat --append SHADOWSOCKS --destination 224.0.0.0/4 --jump RETURN
+sudo iptables --table nat --append SHADOWSOCKS --destination 240.0.0.0/4 --jump RETURN
 sudo iptables --table nat --append SHADOWSOCKS --protocol tcp --jump REDIRECT --to-ports 1080
-sudo iptables --table nat --append SHADOWSOCKS --protocol udp --destination-port 53 --jump REDIRECT --to-ports 1080
 sudo iptables --table nat --append OUTPUT --out-interface ${DEV} --protocol tcp --jump SHADOWSOCKS
 sudo iptables --table nat --append OUTPUT -m physdev --physdev-is-bridged --out-interface ${DEV} --protocol tcp --jump SHADOWSOCKS
  
@@ -90,8 +89,8 @@ then
 sudo ip rule add fwmark 0x1 lookup 100
 fi
 sudo iptables --table mangle --append SHADOWSOCKS --protocol udp --destination-port 53 --jump TPROXY --on-port 1080 --tproxy-mark 0x1/0x1
-# sudo sysctl --write net.ipv4.ip_forward=1 > /dev/null
-# sudo sysctl --load
+sudo sysctl --write net.ipv4.ip_forward=1 > /dev/null
+sudo sysctl --load
  
 # Apply the rules
 sudo iptables --table nat --append PREROUTING --protocol tcp --jump SHADOWSOCKS
