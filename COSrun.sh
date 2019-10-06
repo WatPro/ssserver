@@ -23,6 +23,7 @@ cat << END_OF_FILE > $CONFIG_FILE
     "method": "aes-256-cfb"
 }                                 
 END_OF_FILE
+port_list=`cat $CONFIG_FILE | sed -rn 's/^.*"([0-9]+)": .*$/\1/p'`
 
 cat << EOF > $CONFIG_XML
 <?xml version="1.0" encoding="utf-8"?>
@@ -30,8 +31,8 @@ cat << EOF > $CONFIG_XML
     <short>SSServer</short>
     <description>Shadowsocks Server: TCP and UDP ports.</description>
 EOF
-cat $CONFIG_FILE | sed -rn \
-'s/.*"([0-9]+)": .*/    <port port="\1" protocol="tcp"\/> \
+echo "$port_list" | sed -rn \
+'s/^(.*)$/    <port port="\1" protocol="tcp"\/> \
     <port port="\1" protocol="udp"\/> /p' >> $CONFIG_XML
 cat << EOF >> $CONFIG_XML
 </service>
